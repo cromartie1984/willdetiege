@@ -1,4 +1,4 @@
-@extends('main')
+@extends('main', ['body_class' => 'fixed-sn light-blue-skin'])
 
 @section('title', "| " . htmlspecialchars($post->title))
 

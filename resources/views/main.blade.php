@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  @include('partials._head')
-</head>
+	<head>
+	  @include('partials._head')
+	</head>
 
-<body class="{{ Request::is('/') ? 'fixed-sn light-blue-skin' : (Request::is('admin') || Request::is('admin/posts') ? 'fixed-sn slight-blue-skin' : '')}}">
+	<body @unless(empty($body_class)) class="{{$body_class}}" @endunless>
 
-  
-    @yield('content')
+	  
+	    @yield('content')
 
-  @include('partials._javascript')
+	  @include('partials._javascript')
 
-  @yield('scripts')
+	  @yield('scripts')
 
-</body>
+	</body>
 
 </html>
