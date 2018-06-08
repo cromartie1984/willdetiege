@@ -12,14 +12,14 @@
 <meta property="og:title" content="Site portfolio" />
 <meta property="og:type" content="application" />
 <meta property="og:url" content="https://willdetiege.com" />
-<meta property="og:image" content="http://willdetiege.com/img/vault_42-1920x1080.jpg"/>
+<meta property="og:image" content="https://willdetiege.com/img/vault_42-1920x1080.jpg"/>
 <meta property="og:description" content="Will Detiege est un site porfolio montrant mon travail depuis plusieurs années." />
 <meta property="og:site_name" content="willdetiege.com" />
 
 <!-- Schema.org markup for Google+ -->
 <meta itemprop="name" content="Willdetiege.com">
 <meta itemprop="description" content="Will Detiege est un site porfolio montrant mon travail depuis plusieurs années.">
-<meta itemprop="image" content="http://willdetiege.com/img/vault_42-1920x1080.jpg">
+<meta itemprop="image" content="https://willdetiege.com/img/vault_42-1920x1080.jpg">
 
 <!-- Twitter Card data -->
 <meta name="twitter:card" content="summary_large_image">
@@ -27,7 +27,7 @@
 <meta name="twitter:title" content="Willdetiege.com">
 <meta name="twitter:description" content="Will Detiege est un site porfolio montrant mon travail depuis plusieurs années.">
 <meta name="twitter:creator" content="@AttractivEvent">
-<meta name="twitter:image" content="https://http://willdetiege.com/img/vault_42-1920x1080.jpg">
+<meta name="twitter:image" content="https://willdetiege.com/img/vault_42-1920x1080.jpg">
 <title>willdetiege.com @yield('title')</title> <!--change this title for each page -->
 <!-- CHANGE THIS TITLE FOR EACH PAGE -->
 
@@ -45,7 +45,7 @@
 {!! Html::style('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css') !!}
 
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" />
-<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow|Volkhov:400italic,700" />
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow|Volkhov:400italic,700" />
 {{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css')}}
 {{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.4/css/mdb.min.css')}}
 {{ Html::style('/css/ken-burns.css')}}
