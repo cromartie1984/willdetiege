@@ -26,7 +26,7 @@
  						<a href="/" data-translate="home-footer">Homepage</a>   
  					</li>
  					<li>
- 						<a href="/portfolio">Portfolio</a>
+ 						<a href="/projects" data-translate="portfolio-menu">Portfolio</a>
  					</li>
  					<li>
  						<a href="/blog">Blog</a>
