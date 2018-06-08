@@ -48,9 +48,8 @@
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow|Volkhov:400italic,700" />
 {{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css')}}
 {{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.4/css/mdb.min.css')}}
-{{ Html::style('/css/ken-burns.css')}}
-
-
+<!-- Style for scrollbar plugin     -->
+{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/css/perfect-scrollbar.min.css')}}
 {{ Html::style('css/styles.css')}}
 
 @yield('stylesheets')

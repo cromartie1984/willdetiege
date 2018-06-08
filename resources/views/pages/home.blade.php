@@ -1,7 +1,10 @@
 @extends('main', ['body_class' => 'fixed-sn light-blue-skin'])
 
 @section('stylesheets')
-{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/datedropper/2.0/datedropper.min.css')}}
+<!-- Style for lightbox plugin     -->
+{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css')}}
+<!-- Style for lightbox plugin     -->
+{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css')}}
 @endsection
 
 @section('title','| Homepage')

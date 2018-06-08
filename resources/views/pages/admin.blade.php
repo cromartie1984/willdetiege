@@ -1,5 +1,9 @@
 @extends('main')
 
+@section('stylesheets')
+{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/datedropper/2.0/datedropper.min.css')}}
+@endsection
+
 @section('title', '| Admin')
 
 @section('content')
