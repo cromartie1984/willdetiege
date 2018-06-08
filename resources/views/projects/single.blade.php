@@ -1,5 +1,14 @@
 @extends('main', ['body_class' => 'fixed-sn light-blue-skin'])
 
+@section('stylesheets')
+<!-- Style for lightbox plugin     -->
+{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css')}}
+<!-- Style for lightbox plugin     -->
+{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css')}}
+<!-- Style for lightbox plugin video     -->
+{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/lity/2.2.2/lity.min.css')}}
+@endsection
+
 @section('title', '| ' . $project["title"])
 
 @section('content')

@@ -1,5 +1,9 @@
 @extends('main', ['body_class' => 'fixed-sn light-blue-skin'])
 
+@section('stylesheets')
+{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/datedropper/2.0/datedropper.min.css')}}
+@endsection
+
 @section('title','| Homepage')
 
 @section('content')
@@ -260,11 +264,9 @@
 @endsection
 
 @section('scripts')
-{!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.3.0/perfect-scrollbar.min.js') !!}
 {!! Html::script('https://www.google.com/recaptcha/api.js') !!}
 {!! Html::script('https://maps.googleapis.com/maps/api/js?key=AIzaSyDCCg8xUHCcSyv63K7EHgvoeqDGJ9UHH40') !!}
 {!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/gmaps.js/0.4.24/gmaps.min.js') !!}
-{!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/classie/1.0.1/classie.min.js') !!}
 {!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js') !!}
 {!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js') !!}
 <!-- UI JS file // lightbox plugin -->
@@ -273,12 +275,6 @@
 {!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.min.js') !!}
 <!---Sweet Alert -->
 {!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.0/sweetalert2.min.js') !!}
-<!---Translate plugin -->
-{!! Html::script('/js/jqueryTranslator.min.js') !!}
-<!---cookie plugin -->
-{!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js') !!}
-{!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.min.js') !!}
-
 {!! Html::script('/js/general.js') !!}
 {!! Html::script('/js/homepage.js') !!}
 <script>

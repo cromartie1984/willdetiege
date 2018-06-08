@@ -1,5 +1,16 @@
 @extends('main', ['body_class' => 'fixed-sn light-blue-skin'])
 
+@section('stylesheets')
+<!-- Style for lightbox plugin     -->
+{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css')}}
+<!-- Style for lightbox plugin     -->
+{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css')}}
+<!-- Style for lightbox plugin video     -->
+{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/lity/2.2.2/lity.min.css')}}
+
+{{ Html::style('/css/ken-burns.css')}}
+@endsection
+
 @section('title', "| " . htmlspecialchars($post->title))
 
 @section('content')
@@ -312,12 +323,11 @@
 @endsection
 
 @section('scripts')
+{!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/lity/2.3.0/lity.min.js') !!}
 {!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/salvattore/1.0.9/salvattore.min.js') !!}
 {!! Html::script('//willdetiege.disqus.com/count.js') !!}
 {!! Html::script('https://production-assets.codepen.io/assets/embed/ei.js') !!}
-{!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js') !!}
 {!! Html::script('/js/jquery.photoswipe-global.min.js') !!}
-{!! Html::script('/js/jqueryTranslator.min.js') !!}
 {!! Html::script('/js/general.js') !!}
 {!! Html::script('/js/homepage.js') !!}
 {!! Html::script('/js/blog.js') !!}

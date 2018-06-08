@@ -11,10 +11,10 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="navbar-collapse collapse" id="navbarNav">
         <ul class="nav navbar-nav mr-auto smooth-scroll">
-          <li class="nav-item {{ Request::is('/') ? "active" : ""}}"><a class="nav-link waves-effect waves-light" href="/" data-id="#header" data-scroll="true" data-translate="home-menu">Accueil</a></li>
+          <li class="nav-item {{ Request::is('/') ? "active" : ""}}"><a class="nav-link waves-effect waves-light" href="/" {{ Request::is('/') ? 'data-id=#header data-scroll=true' : ''}} data-translate="home-menu">Accueil</a></li>
           <li class="nav-item {{ Request::is('blog') ? "active" : ""}}"><a class="nav-link waves-effect waves-light" href="/blog" data-translate="blog-menu">Blog</a></li>
           <li class="nav-item {{ Request::is('projects') ? "active" : ""}}"><a class="nav-link waves-effect waves-light" href="/projects" data-translate="portfolio-menu">Projects</a></li>
-          <li class="nav-item {{ Request::is('contact') ? "active" : ""}}"><a class="nav-link waves-effect waves-light" href="/contact" data-scroll="true" data-id="#contact">Contact</a></li>
+          <li class="nav-item {{ Request::is('contact') ? "active" : ""}}"><a class="nav-link waves-effect waves-light" href="/#contact" {{ Request::is('/') ? 'data-id=#contact data-scroll=true' : ''}}>Contact</a></li>
         </ul>
         <ul class="nav navbar-nav smooth-scroll navbar-right">
           @if (!Auth::guest())

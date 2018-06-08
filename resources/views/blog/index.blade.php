@@ -290,12 +290,7 @@
 @endsection
 
 @section('scripts')
-{!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/salvattore/1.0.9/salvattore.min.js') !!}
 {!! Html::script('//willdetiege.disqus.com/count.js') !!}
-{!! Html::script('https://production-assets.codepen.io/assets/embed/ei.js') !!}
-{!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js') !!}
-{!! Html::script('/js/jquery.photoswipe-global.min.js') !!}
-{!! Html::script('/js/jqueryTranslator.min.js') !!}
 {!! Html::script('/js/general.js') !!}
 {!! Html::script('/js/homepage.js') !!}
 {!! Html::script('/js/blog.js') !!}
@@ -304,15 +299,6 @@
 	$(document).ready(function () {
 
 		new WOW().init();
-
-		$(window).scroll(function () {
-			if ($(this).scrollTop() > 300) {
-				$(".nav-growpop").fadeIn();
-			} else {
-				$(".nav-growpop").fadeOut();
-			}
-		});
-
 		/* $('.main').perfectScrollbar({suppressScrollX:true});*/
 	});
 </script>

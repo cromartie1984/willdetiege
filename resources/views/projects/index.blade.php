@@ -65,7 +65,6 @@
 @endsection
 
 @section('scripts')
-{!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js') !!}
 {!! Html::script('/js/general.js') !!}
 {!! Html::script('/js/homepage.js') !!}
 @endsection

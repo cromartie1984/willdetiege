@@ -5,3 +5,9 @@
 {!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.4/js/mdb.min.js') !!}
 <!---select2 plugin -->
 {!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js') !!}
+{!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.3.0/perfect-scrollbar.min.js') !!}
+{!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/classie/1.0.1/classie.min.js') !!}
+<!---Translate plugin -->
+{!! Html::script('/js/jqueryTranslator.min.js') !!}
+<!---cookie plugin -->
+{!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.1.4/js.cookie.min.js') !!}

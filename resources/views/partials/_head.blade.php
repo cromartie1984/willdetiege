@@ -49,16 +49,7 @@
 {{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css')}}
 {{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.4/css/mdb.min.css')}}
 {{ Html::style('/css/ken-burns.css')}}
-<!-- Style for scrollbar plugin     -->
-{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.16/css/perfect-scrollbar.min.css')}}
-<!-- Style for lightbox plugin     -->
-{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css')}}
-<!-- Style for lightbox plugin     -->
-{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css')}}
-<!-- Style for lightbox plugin video     -->
-{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/lity/2.2.2/lity.min.css')}}
 
-{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/datedropper/2.0/datedropper.min.css')}}
 
 {{ Html::style('css/styles.css')}}
 
