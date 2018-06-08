@@ -1,0 +1,22 @@
+{
+    "website-title": "About Me",
+    "website-motto": "I <a>develop</a>, <a>design</a> and <a>write</a> about all things web related. <a>I'm available to hire</a>.",
+    "presentation": "I am Guillaume DETIEGE, I’m a web-developer from ALBI. I’m passionate about learning and teaching everything web related. You can",
+    "introduction" : "I have worked on diverse projects. I am currently trying to improve the website Attractive.events.",
+    "see-portfolio" : "check out my work",
+    "or-me" : "or",
+    "contact-link" : "get in touch",
+    "projects-title" : "My projects",
+    "projects-description" : "From web applications to e-commerce websites.",
+    "project-tag-1" : "Development & Design",
+    "project-tag-2" : "Web development",
+    "project-tag-3" : "Ideas",
+    "project-description-1" : "Development of an application to manage food tickets",
+    "project-description-2" : "Development of an application to create, edit and publish events",
+    "project-description-3" : "Development of an e-commerce website to sell a solution to manage and store documents for judicial representatives",
+    "project-description-4" : "Development of an e-commerce website to sell agricultural products such as beef and veal",
+    "project-description-5" : "Lorem Ipsum",
+    "blog-sub-title" : "Don't miss",
+    "blog-title" : "My latest blog posts",
+    "blog-description" : "Each week, i write a blog post on a particular subject (development, tv series, cinema, ...). You'll learn about me by reading these posts."
+}
