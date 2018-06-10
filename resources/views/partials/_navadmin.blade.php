@@ -6,7 +6,7 @@
     </div>
     <!-- Breadcrumb-->
     <div class="breadcrumb-dn mr-auto">
-        <p>Tableau de bord</p>
+        <p>{{ $pagetitle }}</p>
     </div>
 
     <ul class="nav navbar-nav nav-flex-icons ml-auto">
@@ -24,16 +24,16 @@
 </header>
 <nav class="st-menu st-effect-1" id="menu-1">
     <div class="user-box">
-        <img src="" class="img-fluid rounded-circle">
+        <img src="/blog_ressources/avatar/{{ Auth::user()->avatar }}" class="img-fluid rounded-circle">
         <ul class="collapsible list-unstyled">
         <!--<p class="user text-xs-center">Jane Doe</p>-->
             <li data-toggle="collapse" data-target="#account" class="collapsed">
                 <a class="collapsible-header waves-effect arrow-r text-xs-center" href="#">
-                    <span class="text-capitalize"></span> <i class="fa fa-angle-down rotate-icon"></i>
+                    <span class="text-capitalize">{{ ucfirst(Auth::user()->first_name) . ' ' . strtoupper(Auth::user()->last_name)}}</span> <i class="fa fa-angle-down rotate-icon"></i>
                 </a>
             </li>
             <ul class="sub-menu collapse list-unstyled" id="account">
-                <li><a href="/admin/edit-account" class="waves-effect">Edit Account</a>
+                <li><a href="{{ route('admin.account') }}" class="waves-effect">Edit Account</a>
                 </li>
             </ul>
         </ul>
@@ -46,9 +46,7 @@
             </a>
         </li>
         <ul class="sub-menu collapse list-unstyled" id="dasboards">
-            <li><a href="/admin/dashboard" class="waves-effect">Overview</a>
-            </li>
-            <li><a href="/admin/analytics" class="waves-effect">Analytics</a>
+            <li><a href="{{ route('admin') }}" class="waves-effect">Analytics</a>
             </li>
         </ul>
 
@@ -58,14 +56,25 @@
             </a>
         </li>
         <ul class="sub-menu collapse list-unstyled" id="blog">
-            <li><a href="{{ route('admin.posts') }}" class="waves-effect">Overview</a>
+            <li>
+                <a href="{{ route('admin.posts') }}" class="waves-effect">Overview</a>
             </li>
             <li>
-                <a href="/admin/blog/new" class="waves-effect">Create a post</a>
+                <a href="{{ route('admin.users') }}" class="waves-effect">Create a copyrighter</a>
             </li>
-            
+            <li>
+                <a href="{{ route('admin.categories') }}" class="waves-effect">Create/Edit a category</a>
+            </li>
+            <li>
+                <a href="{{ route('admin.tags') }}" class="waves-effect">Create/Edit a tag</a>
+            </li>
         </ul>
-     
+        <li>
+            <a href="{{ route('admin.contacts') }}" class="waves-effect"><i class="fa fa-phone fa-lg"></i> Contacts</a>
+        </li>
+        <li>
+            <a href="{{ route('admin.timelines') }}" class="waves-effect"><i class="fa fa-calendar fa-lg"></i> Web Timeline</a>
+        </li>
     </ul>
 
     <div class="sidenav-bg mask-slight"></div>

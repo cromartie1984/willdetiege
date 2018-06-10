@@ -1,10 +1,10 @@
-@extends('main')
+@extends('main', ['body_class' => 'fixed-sn slight-blue-skin'])
 
 @section('stylesheets')
 {{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/datedropper/2.0/datedropper.min.css')}}
 @endsection
 
-@section('title', '| Admin')
+@section('title', '| ' . $pagetitle)
 
 @section('content')
 

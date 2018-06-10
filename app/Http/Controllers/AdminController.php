@@ -18,36 +18,44 @@ class AdminController extends Controller{
      * @return \Illuminate\Http\Response
      */
     public function getIndex(){
-        return view('pages.admin');
+      $pagetitle = 'Dashboard';
+      return view('pages.admin')->withPagetitle($pagetitle);
     } 
 
     public function getPosts(){
-        return view('posts.show');
+      $pagetitle = 'Blog - Posts';
+        return view('posts.show')->withPagetitle($pagetitle);
     } 
 
     public function getContacts(){
-        return view('contact.index');
+      $pagetitle = 'Contacts';
+      return view('contact.index')->withPagetitle($pagetitle);
     } 
 
     public function getTimelines(){
-        return view('timeline.show');
+      $pagetitle = 'Timeline';
+      return view('timeline.show')->withPagetitle($pagetitle);
     }
 
     public function getCategories(){
-        return view('categories.index');
+      $pagetitle = 'Categories';
+      return view('categories.index')->withPagetitle($pagetitle);
     }  
 
     public function getTags(){
-        return view('tags.show');
+      $pagetitle = 'Tags';
+      return view('tags.show')->withPagetitle($pagetitle);
     }
 
     public function getAccount(){
-        $user = User::find(Auth::user()->id);
-        return view('users.index')->withUser($user);
+      $pagetitle = 'Account';
+      $user = User::find(Auth::user()->id);
+      return view('users.index')->withUser($user)->withPagetitle($pagetitle);
     }
 
     public function getUsers(){
-        return view('users.show');
+      $pagetitle = 'Users';
+      return view('users.show')->withPagetitle($pagetitle);
     }
 
     public function getPostsList(Datatables $datatables){
@@ -210,7 +218,7 @@ class AdminController extends Controller{
 
     public function getCategoriesList(Datatables $datatables){
 
-        $query = Category::orderBy('created_at','desc');
+        $query = Category::query();
 
         return $datatables->eloquent($query)
                           ->addColumn('DT_RowId', function ($category) {
@@ -223,6 +231,20 @@ class AdminController extends Controller{
                           <button type="button" data-toggle="tooltip" data-placement="left" title="Delete category" class="btn btn-danger btn-simple btn-icon action_tag" data-type-action="delete">
                             <i class="fa fa-times"></i>
                           </button>';
+                          })
+                          ->filter(function ($query) {
+                            if (request()->has('name_fr')) {
+                              $query->where('name_fr', 'like', "%" . request('name_fr') . "%");
+                            }
+                          })
+                          ->order(function ($query) {
+                            if (request()->has('name_fr')) {
+                              $query->orderBy('name_fr', 'asc');
+                            }
+
+                            if (request()->has('created_at')) {
+                              $query->orderBy('created_at', 'asc');
+                            }
                           })
                           ->rawColumns(['actions'])
                           ->make(true);
@@ -270,4 +292,61 @@ class AdminController extends Controller{
                           ->rawColumns(['identification','actions'])
                           ->make(true);
     }
+
+    public function saveCategory(Request $request){
+      $name = $request->name;
+      $category_id = null;
+
+      if($request->id != ''){
+        $category_id = $request->id;
+        $categories = Category::find($category_id);
+        $date = date("Y-m-d H:i:s", strtotime($categories->created_at));
+        $toast_message = 'The category <strong>' . $name . '</strong> has been successfully updated.';  
+      }else{
+        $categories = new Category;
+        $date = date("Y-m-d H:i:s");
+        $toast_message = 'The new category <strong>' . $name . '</strong> has been successfully created.';
+      }
+
+      $categories->name = $name;
+
+      $categories->save();
+
+      $category_id = $categories->id;
+
+      return response()->json([
+        'id' => 'category-' . $category_id,
+        'name' => $name,
+        'created_at' => $date,
+        'actions' => '<div class="display-type float-left text-center item_action" data-table="#categories-list" data-toggle="modal" data-type-action="edit" data-backdrop="static" data-target="#category-dialog" data-content="Edit category">
+        <i class="fa fa-edit" aria-hidden="true"></i>
+      </div>
+      <div class="display-type float-left text-center item_action" data-table="#categories-list" data-type-action="delete" data-toggle="modal" data-backdrop="static" data-target="#delete-dialog" data-type="the category <strong>' . $name . '</strong>" data-message="The category <strong>' . $name . '</strong> has been successfully removed." data-delete-item="/category">
+        <div class="delete-icon"></div>
+      </div>',
+      'title' => 'Blog Posts - Category',             
+      'message' => $toast_message
+      ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteCategory(Request $request){
+        $categories = Category::find($request->id);
+
+        $category_name = $categories->name;
+
+        $categories->delete();
+
+        return response()->json([
+            'title' => 'Blog Posts - Category',
+            'message' => $request->message
+        ]);
+    }
+
+
 }

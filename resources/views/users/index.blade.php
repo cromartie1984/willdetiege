@@ -1,6 +1,6 @@
-@extends('main')
+@extends('main', ['body_class' => 'fixed-sn slight-blue-skin'])
 
-@section('title','| Categories')
+@section('title', '| ' . $pagetitle)
 
 @section('content')
 
@@ -12,9 +12,10 @@
     <div class="container-fluid">
         <!-- Section: Create Page -->
          <section class="section">
+           <form method="POST" enctype="multipart/form-data" action="" class="w-100">
                     <!-- First row -->
                     <div class="row">
-                        <form method="POST" enctype="multipart/form-data" action="" class="w-100">
+                      
                             <!-- First column -->
                             <div class="col-lg-4">
 
@@ -193,9 +194,10 @@
                                 <!--/.Card-->
                             </div>
                             <!-- /.Second column -->
-                        </form>
+                       
                     </div>
                     <!-- /.First row -->
+                     </form>
                 </section>
                 <!-- /.Section: Edit Account -->
     </div>
@@ -206,26 +208,147 @@
 @endsection
 
 @section('scripts')
-
+{!! Html::script('/js/general.js') !!}
+{!! Html::script('/js/admin.js') !!}
 
 <script>
-	$(document).ready(function () {
-		  $('.button-collapse').on('click', function (event) {
-                    event.preventDefault();
-                    $("body").append('<div class="sidenav-overlay" ></div>');
-                    $("body").addClass('st-effect-1');
-                    setTimeout(function () {
-                        $("body").addClass('st-menu-open');
-                    }, 25);
+$(document).ready(function () {
+
+    new WOW().init();
+
+    var nombre_erreur = 0, imageCrop = '', old_photo = '', new_photo = '';
+
+    $('form').submit(function (event) {
+        var form = $(this);
+        new_photo = $(".avatar_image").attr("src") === $("#avatar_image").html() ? '&new_photo=' + $(".avatar_image").attr("src") : '';
+        event.preventDefault();
+        nombre_erreur = 0;
+        nombre_erreur += $("input[name=last_name]").length > 0 && ($("input[name=last_name]").val()).trim() === '' ? error_text("Un last_name est obligatoire.", "last_name") : remove_error("last_name");
+        nombre_erreur += $("input[name=first_name]").length > 0 && ($("input[name=first_name]").val()).trim() === '' ? error_text("Un prénom est obligatoire.", "first_name") : remove_error("first_name");
+        nombre_erreur += $("input[name=email]").length > 0 && ($("input[name=email]").val()).trim() === '' ? error_text("Une adresse e-mail est obligatoire.", "email") : remove_error("email");
+
+        if (nombre_erreur === 0) {
+            if ($(".avatar_overlay .cr-boundary").length) {
+                imageCrop.croppie('result', {
+                    type: 'blob',
+                    size: 'viewport',
+                    /*size: 'original',converse aspect ratio*/
+                    /*size:  { width: 1920, height: 1080 },*/
+                    quality: 0.8,
+                    format: "jpeg",
+                    circle: false
+                }).then(function (resp) {
+                    blobToDataURL(resp, function (dataurl) {
+
+                        $.ajax({
+                            url: form.attr("action"),
+                            type: form.attr('method'),
+                            data: 'type_action=edit&' + form.serialize() + '&' + $.param({'avatar_image': dataurl}),
+                            dataType: 'json',
+                            encode: true
+                        })
+                        .done(function (data) {
+
+                            if (data.success) {
+                                remove_error("email");
+                                swal({
+                                    title: 'Confirmée!',
+                                    text: "Votre compte a bien été mis à jour",
+                                    type: 'success',
+                                    allowOutsideClick: true,
+                                    allowEscapeKey: true
+                                }).then(function () {
+                                    reset_avatar(imageCrop);
+                                    $(".avatar_image").attr({"src": data.new_avatar});
+                                    $("input[name=old_photo]").val(data.new_avatar);
+                                });
+                            }else{
+                                data.errors.email ? error_text(data.errors.email, "email") : '';
+                            }
+                        })
+                        .fail(function (data) {
+                        });
+                    });
                 });
-                $('body').on('click', '.sidenav-overlay', function (event) {
-                    event.preventDefault();
-                    $(".sidenav-overlay").remove();
-                    $("body").removeClass('st-effect-1');
-                    setTimeout(function () {
-                        $("body").removeClass('st-menu-open');
-                    }, 25);
+            }else{
+                $.ajax({
+                    url: form.attr("action"),
+                    data: 'type_action=edit&' + form + new_photo,
+                    type: form.attr('method'),
+                    dataType: 'json',
+                    encode: true
+                })
+                .done(function (data) {
+                    if (data.success) {
+                        remove_error("email");
+                        console.log(data.test);
+                        var new_avatar = data.new_avatar ? data.new_avatar : (new_photo ? $("#avatar_image").html() : '');
+                        swal({
+                            title: 'Confirmée!',
+                            text: "Votre compte a bien été mis à jour",
+                            type: 'success',
+                            allowOutsideClick: true,
+                            allowEscapeKey: true
+                        }).then(function () {
+                            reset_avatar(imageCrop);
+                            new_photo ? $(".cancel_avatar").addClass("hidden-xs-up") : '';
+                            if (new_avatar) {
+                                $(".avatar_image").attr({"src": new_avatar});
+                                $("input[name=old_photo]").val(new_avatar);
+                            }
+                        });
+                    }else{
+                        data.errors.email ? error_text(data.errors.email, "email") : '';
+                    }
+                })
+                .fail(function (data) {
                 });
-	});
+            }
+        }
+    });
+
+    /*upload avatar*/
+    $('#upload').on('change', function () {
+        old_photo = $(".avatar_image").attr("src");
+        var selected_file_name = $(this).val();
+        if (selected_file_name.length > 0) {
+            /* Some file selected */
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                if (!$(".avatar_overlay .cr-boundary").length) {
+                    imageCrop = initCrop();
+                    $(".cancel_avatar i").removeClass("fa-trash").addClass("fa-ban");
+                    $(".cancel_avatar").removeClass("hidden-xs-up");
+                    $('.avatar_image').removeClass("img-fluid mx-auto d-block");
+                    $(".avatar_overlay .rotate_left").removeClass("hidden-xs-up");
+                }
+                imageCrop.croppie('bind', {
+                    url: e.target.result
+                });
+            };
+            reader.readAsDataURL(this.files[0]);
+
+        }
+        $(this).val('');
+    });
+
+    /*rotate the image*/
+    $('.rotate_left').on('click', function (ev) {
+        imageCrop.croppie('rotate', parseInt($(this).data('deg')));
+    });
+
+    /*Supprimer avatar / cancel upload*/
+    $(".cancel_avatar").on('click', function (ev) {
+        if ($(".avatar_overlay .cr-boundary").length) {
+            reset_avatar(imageCrop);
+            old_photo === $("#avatar_image").html() ? $(".cancel_avatar").addClass("hidden-xs-up") : '';
+        }else{
+            if ($(".avatar_image").attr("src") !== $("#avatar_image").html()) {
+                $(".avatar_image").attr({"src": $("#avatar_image").html()});
+                $(".cancel_avatar").addClass("hidden-xs-up");
+            }
+        }
+    });
+}); 
 </script>
 @endsection

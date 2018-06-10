@@ -56,10 +56,13 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('admin/timelines', 'AdminController@getTimelines')->name('admin.timelines');
 	Route::get('admin/timelines/list', 'AdminController@getTimelinesList')->name('admin.timelines.list');
 	Route::get('admin/categories', 'AdminController@getCategories')->name('admin.categories');
+	Route::post('admin/categories', 'AdminController@saveCategory')->name('admin.categories.save');
+	Route::delete('admin/categories', 'AdminController@deleteCategory')->name('admin.categories.delete');
 	Route::get('admin/categories/list', 'AdminController@getCategoriesList')->name('admin.categories.list');
 	Route::get('admin/tags', 'AdminController@getTags')->name('admin.tags');
 	Route::get('admin/tags/list', 'AdminController@getTagsList')->name('admin.tags.list');
 	Route::get('admin/account', 'AdminController@getAccount')->name('admin.account');
+	Route::post('admin/account', 'AdminController@saveAccount')->name('admin.account.save');
 	Route::get('admin/users', 'AdminController@getUsers')->name('admin.users');
 	Route::get('admin/users/list', 'AdminController@getUsersList')->name('admin.users.list');
 });

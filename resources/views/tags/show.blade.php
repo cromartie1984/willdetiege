@@ -1,6 +1,6 @@
-@extends('main')
+@extends('main', ['body_class' => 'fixed-sn slight-blue-skin'])
 
-@section('title','| Tags')
+@section('title', '| ' . $pagetitle)
 
 @section('content')
 

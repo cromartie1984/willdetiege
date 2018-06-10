@@ -105,7 +105,7 @@
         @foreach($posts as $post)
         <div class="col-sm-4 blog-item">
           <div class="card card-blog">
-            <a href="{{ $post["slug"] }}" class="header">
+            <a href="{{ route('blog.single',$post["slug"]) }}" class="header">
               <img src="{{ $post["thumbnail"] }}" class="image-header">
             </a>
             <div class="content">

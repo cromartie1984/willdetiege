@@ -1,4 +1,243 @@
-$(document).ready(function () {
+function dialogCreation(table){
+    swal({
+        padding: 20,
+        width: '500px',
+        background: '#fff',
+        timer: null,
+        animation: false,
+        allowOutsideClick: true,
+        allowEscapeKey: true,
+        showConfirmButton: true,
+        input: null,
+        text: null,
+        title: 'Création nouvelle catégorie',
+        html: '\n\
+        <form id="new_category">\n\
+        <div class="row">\n\
+        <div class="col-xs-12 col-md-12">\n\
+        <div class="md-form mt-2">\n\
+        <i class="material-icons prefix">title</i>\n\
+        <input type="text" id="name_fr" name="name_fr" class="form-control">\n\
+        <label for="name_fr">Nom</label>\n\
+        </div>\n\
+        </div>\n\
+        <div class="col-xs-12 col-md-12">\n\
+        <div class="md-form mt-2">\n\
+        <i class="material-icons prefix">title</i>\n\
+        <input type="text" id="name_eng" name="name_eng" class="form-control">\n\
+        <label for="name_eng">Name</label>\n\
+        </div>\n\
+        </div>\n\
+        </div>\n\
+        </form>',
+        type: null,
+        showCancelButton: true,
+        buttonsStyling: true,
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+        confirmButtonColor: '#4caf50',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'OK',
+        cancelButtonText: "CANCEL",
+        reverseButtons: true,
+        focusCancel: false,
+        showCloseButton: false,
+        showLoaderOnConfirm: true,
+        preConfirm: function () {
+            return new Promise(function (resolve, reject) {
+                if (type_action !== "info") {
+                    $.ajax({
+                        url: $("#action_categories").html(),
+                        data: 'type_action=create&'+ $('#new_category').serialize(),
+                        type: 'POST',
+                        dataType: 'json',
+                        encode: true
+                    })
+                    .done(function (data) {
+                        if (!data.success) {
+                            reject('aie');
+                        }else{
+                            resolve([
+                                data.category_settings[0],
+                                $('input[name=name_fr]').val(),
+                                $('input[name=name_eng]').val(),
+                                data.category_settings[1],
+                                ]);
+                        }
+
+                    })
+                    .fail(function (data) {
+                        reject('aie');
+                    });
+                }
+                else{
+                    resolve();
+                }
+            });
+
+        },
+        imageUrl: null,
+        imageWidth: null,
+        imageHeight: null,
+        imageClass: null,
+        inputPlaceholder: '', 
+        inputValue: '', 
+        inputAutoTrim: true,
+        inputClass: null,
+        onOpen: null
+    }).then(function (result) {
+        swal({
+            title: 'Confirmée!',
+            text: 'La catégorie '+result[1]+' a bien été créee',
+            type: 'success',
+            allowOutsideClick: false
+        }).then(function () {
+            $(table).DataTable().row.add({
+                "DT_RowId": "category_" + result[0],
+                "name_fr": result[1],
+                "name_eng": result[2],
+                "created_at": result[3],
+                "actions_category": '<button type="button" data-toggle="tooltip"  data-placement="left" title="Edit Category" class="btn btn-success btn-simple btn-icon action_category" data-type-action="edit">\n\
+                <i class="fa fa-edit"></i>\n\
+                </button><br/>\n\
+                <button type="button" data-toggle="tooltip" data-placement="left" title="Delete Category" class="btn btn-danger btn-simple btn-icon action_category" data-type-action="delete">\n\
+                <i class="fa fa-times"></i>\n\
+                </button>'
+            }).draw().node();
+        });
+
+    }).catch(swal.noop);
+
+}
+
+$(".add_new_item").on('click', function(){
+    dialogCreation($(this).attr('data-table'));
+});
+
+/*search filter on DataTables*/
+$('input[name=name_search]').on('keyup',function () {
+    $($(this).parent('.table_search').attr('data-table')).DataTable().columns($(this).attr('data-table-column')).search($(this).val()).draw();
+});
+
+/*Sort by Filter*/
+$('select[name=filter]').on('change', function(e) {
+    if ($(this).val()[1] === "a") {
+        $($(this).attr('data-table')).DataTable().column($(this).val()[0]).order('asc').draw();
+    }else{
+        $($(this).attr('data-table')).DataTable().column($(this).val()[0]).order('desc').draw();
+    }
+});
+
+CRUDitem = function( item, columns_list, column_defs, order, ajaxUrl, paging, buttons ) {
+        //'<"row filter_parameters"<"col-xs-12 col-sm-6 col-md-2 col-lg-2"f><"col-xs-12 col-sm-6 col-md-4 col-lg-2"><"col-xs-12 col-sm-6 col-md-2 col-lg-2"B>>iprtip'
+            var table = $('#'+item+'s-list').DataTable({
+                serverSide: ajaxUrl ? true : false,
+                processing: ajaxUrl ? true : false,
+                ajax: ajaxUrl ? ajaxUrl : false,
+                "paging":  paging ? true : false,
+                "info":     false,
+                "scrollCollapse": true,
+                "columns": columns_list,
+                "dom": paging ? 'pt' : '',
+                responsive: false,
+                fixedHeader: true,
+                select: false,
+                scrollCollapse: true,
+                "pageLength": paging ? paging : '',
+                columnDefs: column_defs,
+                "order": order ? [order] : [],
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "<Filter>",
+                    paginate: {
+                        previous: "&nbsp;",
+                        next : "&nbsp;"
+                    },
+                    "zeroRecords": item == 'comment-post' ? " " : "No matching records found - Clear the filter to see the full list",
+                },
+                "drawCallback": function (settings) {
+                    $('[data-toggle="tooltip"]').tooltip({
+                        container: 'table'
+                    });
+                },
+                "createdRow": function (row, data, index) {
+                    if($("#show-action-button i").hasClass('fa-eye-slash')) $(row).addClass('show-action-button');
+                    if($("#display_grid").hasClass('active')) $(row).addClass('grid-item');
+
+                    $("#display_grid").click(function(){
+                        $(".display-type").removeClass("active");
+                        if(!$(this).hasClass("active")){
+                            $(this).addClass("active");
+                            $(row).addClass("grid-item");
+                        } 
+                    });
+
+                    $("#display_list").click(function(){
+                        $(".display-type").removeClass("active");
+                        if(!$(this).hasClass("active")){
+                            $(this).addClass("active");
+                            $(row).removeClass("grid-item");
+                        } 
+                    });
+                },
+                initComplete: function () {
+                //$('#participation_filter').selectpicker();
+                    /*  $('<select class="selectpicker show-tick" id="participation_filter" data-style="btn-info" data-width="100%" title="Trier par">\n\
+                        <option value="5a">Titre A-Z</option>\n\
+                        <option value="5d">Titre Z-A</option>\n\
+                        <option data-divider="true"></option>\n\
+                        <option value="1a">Date asc</option>\n\
+                        <option value="1d" selected>Date desc</option>\n\
+                    </select>')
+                        .appendTo($(".filter_parameters > div:last-child"))
+                        .on('change', function () {
+                            var col = $(this).val();
+                            if (col[1] === "a") {
+                                article.column(col[0]).order('asc').draw();
+                            }
+                            else
+                            {
+                                article.column(col[0]).order('desc').draw();
+                            }
+
+                        });
+                $('#participation_filter').selectpicker();
+                this.api().columns([3, 4]).every(function () {
+                    var column = this;
+                    var nom_select = '', numero_select = 0;
+                    if (column[0][0] === 3) {
+                        nom_select = 'auteur';
+                        numero_select = "2";
+                    }
+                    else
+                    {
+                        nom_select = 'catégorie';
+                        numero_select = "3";
+                    }
+                    var select = $('<select class="selectpicker show-tick" id="' + nom_select + '_filter" data-style="btn-info" data-width="100%" title="Filtrer par ' + nom_select + '"><option value="" selected>Tous</option></select>')
+                            .appendTo($(".filter_parameters > div:nth-child(" + numero_select + ")"))
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex(
+                                        $(this).val()
+                                        );
+                                column
+                                        .search(val ? '^' + val + '$' : '', true, false)
+                                        .draw();
+                            });
+                    column.data().unique().sort().each(function (d, j) {
+                        if (d !== "") {
+                            select.append('<option value="' + d + '" class="text-capitalize">' + d + '</option>');
+                        }
+                    });
+                    $('#' + nom_select + '_filter').selectpicker();
+                });*/
+
+                }
+        }); 
+
+            if(ajaxUrl) $(".content_pagination").append($(".dataTables_paginate"));
+
+        }   
 
     /*Sidebar*/
 
@@ -22,10 +261,11 @@ $(document).ready(function () {
         $(".arrow-r").not(this).find(".fa-angle-down").removeClass("rotate-element");
         $(this).find(".fa-angle-down").toggleClass("rotate-element");
     });
-    $('.st-menu').perfectScrollbar();
+   // $('.st-menu').perfectScrollbar();
     var fields_to_fill = ["titre_article", "url_article", "cover_image", "resume_article", "categorie_article", "tags_article", "contenu_article"];
 
 
+    
 
     copyrighterOverview = function () {
 
@@ -1745,216 +1985,29 @@ $(document).ready(function () {
 
     categoriesOverview = function () {
 
-        var categories = $('#categories').DataTable({
-            processing: true,
-            serverSide: false,
-            ajax: $("#extraction-categories").html(),
-            columns: [
-                {"data": "name_fr"},
-                {"data": "name_eng"},
-                {"data": "created_at"},
-                {"data": "actions_category"}
-            ],
-            lengthChange: true,
-            lengthMenu: [[5, 10, 15, -1], [5, 10, 15, "Tous"]],
-            scrollCollapse: true,
-            paging: true,
-            dom: '<"row filter_parameters"<"col-xs-12 col-sm-6 col-md-2 col-lg-2"f><"col-xs-12 col-sm-6 col-md-4 col-lg-2"><"col-xs-12 col-sm-6 col-md-2 col-lg-2"B>>iprtip',
-            buttons: [
-                {
-                    text: '<i class="fa fa-user fa-2x" aria-hidden="true"></i> Créer une catégorie',
-                    className: 'btn-primary',
-                    action: function (e, dt, node, config) {
-                        swal({
-                            padding: 20,
-                            width: '500px',
-                            background: '#fff',
-                            timer: null,
-                            animation: false,
-                            allowOutsideClick: true,
-                            allowEscapeKey: true,
-                            showConfirmButton: true,
-                            input: null,
-                            text: null,
-                            title: 'Création nouvelle catégorie',
-                            html: '\n\
-                            <form id="new_category">\n\
-                                <div class="row">\n\
-                                    <div class="col-xs-12 col-md-12">\n\
-                                        <div class="md-form mt-2">\n\
-                                            <i class="material-icons prefix">title</i>\n\
-                                            <input type="text" id="name_fr" name="name_fr" class="form-control">\n\
-                                            <label for="name_fr">Nom</label>\n\
-                                        </div>\n\
-                                    </div>\n\
-                                    <div class="col-xs-12 col-md-12">\n\
-                                        <div class="md-form mt-2">\n\
-                                            <i class="material-icons prefix">title</i>\n\
-                                            <input type="text" id="name_eng" name="name_eng" class="form-control">\n\
-                                            <label for="name_eng">Name</label>\n\
-                                        </div>\n\
-                                    </div>\n\
-                                </div>\n\
-                            </form>',
-                            type: null,
-                            showCancelButton: true,
-                            buttonsStyling: true,
-                            confirmButtonClass: 'btn btn-success',
-                            cancelButtonClass: 'btn btn-danger',
-                            confirmButtonColor: '#4caf50',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'OK',
-                            cancelButtonText: "CANCEL",
-                            reverseButtons: true,
-                            focusCancel: false,
-                            showCloseButton: false,
-                            showLoaderOnConfirm: true,
-                            preConfirm: function () {
-                                return new Promise(function (resolve, reject) {
-                                    if (type_action !== "info") {
-                                        $.ajax({
-                                            url: $("#action_categories").html(),
-                                            data: 'type_action=create&'+ $('#new_category').serialize(),
-                                            type: 'POST',
-                                            dataType: 'json',
-                                            encode: true
-                                        })
-                                        .done(function (data) {
-                                            if (!data.success) {
-                                                reject('aie');
-                                            }
-                                            else
-                                            {
-                                                resolve([
-                                                        data.category_settings[0],
-                                                        $('input[name=name_fr]').val(),
-                                                        $('input[name=name_eng]').val(),
-                                                        data.category_settings[1],
-                                                    ]);
-                                            }
+        var column_list = [
+        { "data": "name_fr" },
+        { "data": "name_eng" },
+        { "data": "created_at" },
+        { "data": "actions" }
+        ],column_defs = [ 
+        {
+            "targets": [2],
+            "visible": false
+        },
+        {
+            "targets": [2, 3],
+            "searchable": false
+        },
+        {
+            "targets": -1,
+            "className": 'td-actions text-xs-right'
+        },
+        {responsivePriority: 1, targets: 0},
+        {responsivePriority: 2, targets: 2}
+        ];
 
-                                        })
-                                        .fail(function (data) {
-                                            reject('aie');
-                                        });
-                                    }
-                                    else
-                                    {
-                                        resolve();
-                                    }
-                                });
-
-                            },
-                            imageUrl: null,
-                            imageWidth: null,
-                            imageHeight: null,
-                            imageClass: null,
-                            inputPlaceholder: '', 
-                            inputValue: '', 
-                            inputAutoTrim: true,
-                            inputClass: null,
-                            onOpen: null
-                        }).then(function (result) {
-                            swal({
-                                title: 'Confirmée!',
-                                text: 'La catégorie '+result[1]+' a bien été créee',
-                                type: 'success',
-                                allowOutsideClick: false
-                            }).then(function () {
-                                categories.row.add({
-                                    "DT_RowId": "category_" + result[0],
-                                    "name_fr": result[1],
-                                    "name_eng": result[2],
-                                    "created_at": result[3],
-                                    "actions_category": '<button type="button" data-toggle="tooltip"  data-placement="left" title="Edit Category" class="btn btn-success btn-simple btn-icon action_category" data-type-action="edit">\n\
-                                    <i class="fa fa-edit"></i>\n\
-                                    </button><br/>\n\
-                                    <button type="button" data-toggle="tooltip" data-placement="left" title="Delete Category" class="btn btn-danger btn-simple btn-icon action_category" data-type-action="delete">\n\
-                                    <i class="fa fa-times"></i>\n\
-                                    </button>'
-                                }).draw().node();
-                            });
-
-                        }).catch(swal.noop);
-                    }
-                }
-            ],
-            pageResize: false,
-            responsive: true,
-            language: {
-                "decimal": "",
-                "emptyTable": "Aucune donnée disponible dans cette table",
-                "info": " _START_ à _END_ de _TOTAL_ categories",
-                "infoEmpty": "Aucune entrée",
-                "infoFiltered": "(filtered from _MAX_ total entries)",
-                "infoPostFix": "",
-                "thousands": ",",
-                "lengthMenu": "Montrer _MENU_ categories",
-                "loadingRecords": "Chargement...",
-                "processing": "Traitement...",
-                "search": "_INPUT_",
-                "zeroRecords": "Aucune donnée trouvée",
-                searchPlaceholder: "Rechercher par titre",
-                "paginate": {
-                    "first": "Premier",
-                    "last": "Dernier",
-                    "next": "Suivant",
-                    "previous": "Précédent"
-                },
-                "aria": {
-                    "sortAscending": ": activate to sort column ascending",
-                    "sortDescending": ": activate to sort column descending"
-                }
-            },
-            columnDefs: [
-                {
-                    "searchable": false,
-                    "orderable": false,
-                    "targets": [0]
-                },
-                {
-                    "targets": 3,
-                    "className": 'td-actions text-xs-right'
-                },
-                {
-                    "targets": [2],
-                    "visible": false
-                },
-                {
-                    "targets": [3],
-                    "searchable": false
-                },
-                {responsivePriority: 1, targets: 0},
-                {responsivePriority: 2, targets: 3}],
-            order: [[2, 'desc']],
-            "drawCallback": function () {
-                $('[data-toggle="tooltip"]').tooltip({
-                    container: 'table'
-                });
-            },
-            initComplete: function () {
-                $('<select class="selectpicker show-tick" id="participation_filter" data-style="btn-info" data-width="100%" title="Trier par">\n\
-                        <option value="0a">Nom A-Z</option>\n\
-                        <option value="0d">Nom Z-A</option>\n\
-                        <option data-divider="true"></option>\n\
-                        <option value="2a">Date asc</option>\n\
-                        <option value="2d" selected>Date desc</option>\n\
-                    </select>')
-                        .appendTo($(".filter_parameters > div:nth-child(2)"))
-                        .on('change', function () {
-                            var col = $(this).val();
-                            if (col[1] === "a") {
-                                categories.column(col[0]).order('asc').draw();
-                            }
-                            else
-                            {
-                                categories.column(col[0]).order('desc').draw();
-                            }
-
-                        });
-                $('#participation_filter').selectpicker();
-            }
-        });
+        CRUDitem( "categorie", column_list, column_defs, [ 2, 'desc' ], '/admin/categories/list', 5);
 
         var tr = '', first_close = false, type_action = '', category_id = '', rowData = '', text_confirmation = '', titre_dialog = '',
                 contenu_dialog = '', type_dialog = '', nom_category = '', actions_category = '', confirmButtonText = '', showCancelButton = false;
@@ -2466,5 +2519,5 @@ $(document).ready(function () {
     };
 
 
-});
+
 
