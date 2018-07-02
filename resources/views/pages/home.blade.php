@@ -5,6 +5,8 @@
 {{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css')}}
 <!-- Style for lightbox plugin     -->
 {{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css')}}
+
+{{ Html::style('https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.24.4/sweetalert2.min.css')}}
 @endsection
 
 @section('title','| Homepage')
@@ -118,11 +120,11 @@
                 </div>
               </div>
               <a href="{{ $post["slug"] }}" class="card-title">
-                <h3>{{ $post["title"] }}</h3>
+                <h3>{{ $language === 'fr' ? $post["title"] : ($post["title_eng"] ? $post["title_eng"]  : $post["title"])   }}</h3>
               </a>
               <div class="line-divider line-danger"></div>
               <h6 class="card-category orange-text">{{ $language === 'fr' ? $post["name_fr"] : ($post["name_eng"] ? $post["name_eng"]  : $post["name_fr"]) }}</h6>
-              <p class="text-description grey-text">{!! $post["excerpt"] ? $post["excerpt"] : substr(strip_tags($post["body"]), 0, 100) . (strlen(strip_tags($post["body"])) > 100 ? "..." : "") !!}</p>
+              <p class="text-description grey-text">{!! ($language === 'fr' ? $post["excerpt"] : ($post["excerpt_eng"] ? $post["excerpt_eng"]  : $post["excerpt"])) ? ($language === 'fr' ? $post["excerpt"] : ($post["excerpt_eng"] ? $post["excerpt_eng"]  : $post["excerpt"])) : substr(strip_tags($language === 'fr' ? $post["body"] : ($post["body_eng"] ? $post["body_eng"]  : $post["body"])), 0, 150) . (strlen(strip_tags($language === 'fr' ? $post["body"] : ($post["body_eng"] ? $post["body_eng"]  : $post["body"]))) > 250 ? "..." : "") !!}</p>
             </div>
           </div>
         </div>
@@ -179,7 +181,7 @@
     <div id="contactUsMap" class="map"></div>
 
     <div class="card card-contact card-raised">
-      <form role="form" method="post" action="contact-process">
+      {{ Form::open(['route' => 'contact.store']) }}
         <div class="header header-raised header-rose text-center">
           <h4 class="card-title text-xs-center">Contactez-moi</h4>
         </div>
@@ -207,7 +209,7 @@
                   </div>
                   <div class="description">
                     <h5 class="info-title" data-translate="write-text">Écrivez-moi</h5>
-                    <p> 74 allée des Cyclamens<br>
+                    <p> 78 allée des Cyclamens<br>
                       74 320 Sévrier<br>
                       France
                     </p>
@@ -219,16 +221,16 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="md-form">
-                  <i class="fa fa-user prefix"></i>
-                  <input type="text" name="name" id="name" class="form-control">
-                  <label for="name" data-translate="nom-text">Votre nom</label>
+                  <i class="fa fa-user prefix"></i> 
+                  {{ Form::text('name',null,array('class'=> 'form-control', 'id' => 'name', 'required' => true, 'minlength' => '3', 'maxlength' => '100'))}}
+                  {{ Form::label('name',"Votre nom", ['data-translate' => 'nom-text'])}}
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="md-form">
                   <i class="fa fa-envelope-o prefix"></i>
-                  <input type="text" name="email" id="email" class="form-control">
-                  <label for="email" data-translate="email-text">Votre adresse email</label>
+                  {{ Form::email('email',null,array('class'=> 'form-control', 'id' => 'email', 'required' => true, 'minlength' => '5', 'maxlength' => '100'))}}
+                  {{ Form::label('email',"Votre adresse email", ['data-translate' => 'email-text'])}}
                 </div>
               </div>
             </div>
@@ -236,22 +238,21 @@
 
             <div class="md-form">
               <i class="fa fa-pencil prefix"></i>
-              <textarea type="message" name="message" id="message" class="md-textarea"></textarea>
-              <label for="message" data-error="Un message est obligatoire" data-translate="message-text">Ecrivez votre message ici</label>
+              {{ Form::textarea('message', null, array('id' => 'message','required' => true,'class'=> 'md-textarea',  'rows' => '4', 'length' => '400'))}}
+              {{ Form::label('message',"Ecrivez votre message ici", ['data-translate' => 'message-text', 'data-error' => 'Un message est obligatoire'])}}
             </div>
 
             <div class="row">
               <div class="col-md-6">
-                <div class="g-recaptcha" data-sitekey="6Lfu9xoUAAAAADN_G4okq-NZZLPRBOVsGHb-pfeb"></div>
+                {!! Captcha::display($attributes) !!}
                 <div id="error-captcha" class="text-danger"></div>
               </div>
               <div class="col-md-6">
-                <button type="submit" class="btn btn-pink pull-right" data-translate="send-text">Envoyer</button>
+                {{ Form::button('<i class="fa fa-send" aria-hidden="true"></i> Envoyer', ['type' => 'submit', 'class' => 'btn btn-pink pull-right', 'data-translate' => 'send-text']) }}
               </div>
             </div>
           </div>
-
-        </form>
+        {{ Form::close() }}
       </div>
     </div>
 
@@ -277,7 +278,7 @@
 <!-- Corrige le problème du polyfill pour IE -->
 {!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.1.1/es6-promise.min.js') !!}
 <!---Sweet Alert -->
-{!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.9.0/sweetalert2.min.js') !!}
+{!! Html::script('https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.24.4/sweetalert2.min.js') !!}
 {!! Html::script('/js/general.js') !!}
 {!! Html::script('/js/homepage.js') !!}
 <script>
@@ -289,10 +290,7 @@
       isFitWidth: true
     });
 
-
     grid_images.isotope({filter: '*'});
-
-
 
     var lat = 45.8652666;
     var long = 6.1415404;
@@ -324,12 +322,17 @@
 
                 $('.timeline-body').photoSwipe(slideSelector, options, events);
 
-
-
                 var nombre_erreur = 0;
+
+                const swalWithBootstrapButtons = swal.mixin({
+                  confirmButtonClass: 'btn btn-success',
+                  cancelButtonClass: 'btn btn-danger',
+                  buttonsStyling: false,
+                })
 
                 $("form").submit(function (event) {
 
+                  var form = $(this);
 
                   event.preventDefault();
                   nombre_erreur = 0;
@@ -339,28 +342,30 @@
                   nombre_erreur += ($("textarea[name=message]").val()).trim() === '' ? error_text("Un message est obligatoire.", "message") : remove_error("message");
                   if (nombre_erreur === 0) {
                     $.ajax({
-                      type: 'POST',
-                      url: $("form").attr("action"),
-                      data: $("form").serialize(),
+                      type: form.attr("method"),
+                      url: form.attr("action"),
+                      data: form.serialize(),
                       dataType: 'json',
                       encode: true
                     })
-                    .done(function (data) {
-                      if (!data.success) {
-                        error_text(data.errors.email, "email");
-                        data.errors.recaptcha ? $("#error-captcha").html(data.errors.recaptcha) : '';
-                      }
-                      else
-                      {
+                    .done(function (response) {
+                      if (response.errors) {
+                        for(error in response.errors){
+                          error_text(response.errors[error], error);
+                        }
+                        
+                        if(response.errors['g-recaptcha-response']) $("#error-captcha").html(response.errors['g-recaptcha-response']);   
+                      }else{
                         remove_error("email");
                         remove_error("name");
                         remove_error("message");
                         $("#error-captcha").html("");
 
-                        swal({
+                        swalWithBootstrapButtons({
                           title: 'Demande de contact',
                           text: 'Votre demande de prise en contact a bien été prise en compte !',
-                          type: 'success'
+                          type: 'success',
+                          confirmButtonText: 'Fermer',
                         }).then(function () {
                           $("input[name=name]").val("");
                           $("input[name=email]").val("");
@@ -370,15 +375,11 @@
                       }
 
                     })
-                    .fail(function (data) {
-
+                    .fail(function (response) {
+                      console.log(response)
                     });
                   }
                 });
-
-                /*animated slideInDown*/
-                /*$('#yourElement').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', doSomething);*/
-
 
               //set animation timing
               var animationDelay = 2500,

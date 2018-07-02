@@ -12,63 +12,9 @@ use Cookie;
 
 class PagesController extends Controller {
 
-	public function getIndex(){
-		# process variable data or params
-		# talk to the model
-		# receive from the model
-		# compile or process data from the model if needed
-		# pass that data to the correct view
-		# return "Home";
-		$posts = Post::orderBy('created_at', 'desc')->limit(4)->get();
-		return view('pages.welcome')->withPosts($posts);
-	}
-
-	public function getAbout(){
-		$first = 'Will';
-		$last = 'Detiege';
-
-		$fullname = $first . " " . $last;
-		$email = 'me@willdetiege.com';
-		$data = [];
-		$data['email'] = $email;
-		$data['fullname'] = $fullname;
-		# return "About Me";
-		# return view('about')->with("fullname",$fullname);
-		# return view('pages.about')->withFullname($fullname)->withEmail($email);
-		return view('pages.about')->withData($data);
-	}
-
-	public function getContact(){
-		# return "Hello Contact Page";
-		return view('pages.contact');
-	}
-
-	public function postContact(Request $request){
-		$this->validate($request, [
-			'email' => 'required|email',
-			'subject'=> 'min:3',
-			'message' => 'min:10']);
-
-		$data = array(
-			'email' => $request->email,
-			'subject' => $request->subject,
-			'bodyMessage' => $request->message
-			);
-
-		Mail::send('emails.contact', $data, function($message) use ($data){
-			$message->from($data['email']);
-			$message->to('me@willdetiege.com');
-			$message->subject('subject');
-		});
-
-		$request->session()->flash('success','Your email was sent!!');
-
-		return redirect('/');
-	}
-
 	public function getProjects(){
 		$language = '';
-    	if (Cookie::get('app-language')) {
+    	if (Cookie::get('app-language') !== false) {
     		$language = Cookie::get('app-language');
     		if ($language !== 'fr'){
     			setlocale(LC_TIME, 'en_US.UTF8');
@@ -85,7 +31,7 @@ class PagesController extends Controller {
 
 	public function getProject($slug){
 		$language = '';
-    	if (Cookie::get('app-language')) {
+    	if (Cookie::get('app-language') !== false) {
     		$language = Cookie::get('app-language');
     		if ($language !== 'fr'){
     			setlocale(LC_TIME, 'en_US.UTF8');

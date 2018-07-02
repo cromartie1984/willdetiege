@@ -12,7 +12,7 @@ use Cookie;
 class BlogController extends Controller{
 	public function getIndex($type = null, $slug = null, $month = null){
 		$language = '';
-    	if (Cookie::get('app-language')) {
+    	if (Cookie::get('app-language') !== false) {
     		$language = Cookie::get('app-language');
     		if ($language !== 'fr'){
     			setlocale(LC_TIME, 'en_US.UTF8');
@@ -76,7 +76,7 @@ class BlogController extends Controller{
 
     public function getSingle($slug){
     	$language = '';
-    	if (Cookie::get('app-language')) {
+    	if (Cookie::get('app-language') !== false) {
     		$language = Cookie::get('app-language');
     		if ($language !== 'fr'){
     			setlocale(LC_TIME, 'en_US.UTF8');

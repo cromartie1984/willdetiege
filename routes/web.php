@@ -45,6 +45,8 @@ Route::get('projects/{slug}', 'PagesController@getProject')->name('projects.sing
 
 Route::get('/', 'HomeController@index');
 
+Route::post('contact', 'HomeController@Contact')->name('contact.store');
+
 Route::resource('/posts', 'PostController');
 
 Route::group(['middleware' => 'auth'], function () {

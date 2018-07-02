@@ -168,6 +168,7 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         Spatie\Analytics\AnalyticsServiceProvider::class,
         EmailChecker\Laravel\EmailCheckerServiceProvider::class,
+        Buzz\LaravelGoogleCaptcha\CaptchaServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -237,6 +238,7 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Analytics' => Spatie\Analytics\AnalyticsFacade::class,
         'EmailChecker' => EmailChecker\Laravel\EmailCheckerFacade::class,
+        'Captcha' => Buzz\LaravelGoogleCaptcha\CaptchaFacade::class,
     ],
 
 ];
