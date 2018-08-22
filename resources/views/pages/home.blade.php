@@ -285,7 +285,7 @@
   $(document).ready(function () {
 
     var grid_images = $('.grid').isotope({
-      /* options*/
+      // options
       itemSelector: '.blog-item',
       isFitWidth: true
     });
